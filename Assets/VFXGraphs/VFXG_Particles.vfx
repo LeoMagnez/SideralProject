@@ -6301,7 +6301,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":6918954641851045129,"guid":"0cb96e08d9837194fbf9ae9b7082c3a4","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":6918954641851045129,"guid":"9fad6fbe670f6ad4c9ccce0799bacaad","type":3}}'
     m_Space: 2147483647
   m_Property:
     name: attributeMap
@@ -7648,7 +7648,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.AABox, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"center":{"x":0.0,"y":0.0,"z":300.6297912597656},"size":{"x":600.0,"y":600.0,"z":600.0}}'
+      m_SerializableObject: '{"center":{"x":0.0,"y":0.0,"z":0.0},"size":{"x":600.0,"y":600.0,"z":600.0}}'
     m_Space: 0
   m_Property:
     name: box
@@ -8254,7 +8254,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.TSphere, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"transform":{"position":{"x":80.0,"y":0.0,"z":320.0},"angles":{"x":0.0,"y":0.0,"z":0.0},"scale":{"x":1.0,"y":1.0,"z":1.0}},"radius":260.0}'
+      m_SerializableObject: '{"transform":{"position":{"x":0.0,"y":0.0,"z":0.0},"angles":{"x":0.0,"y":0.0,"z":0.0},"scale":{"x":1.0,"y":1.0,"z":1.0}},"radius":260.0}'
     m_Space: 0
   m_Property:
     name: sphere
