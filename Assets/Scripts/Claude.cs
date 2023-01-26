@@ -2,21 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using UnityEngine.Events;
 
 public class Claude : MonoBehaviour
 {
     [Header("Claude properties")]
     public float claudeBaseSpeed;
     public float claudeChasingSpeed;
+    public float claudeSlowSpeed;
+    public float slowDuration;
+    public float impactForce;
+    public float damage;
 
     [Header("Player properties")]
     public GameObject player;
     public float maxDistanceBeweenClaudeAndThePlayer;
 
+    [Header("What happens if Claude hits the player?")]
+    public UnityEvent claudeHitsPlayer;
+
 
     private VisualEffect VE_Claude_Cloud;
     private VisualEffect VE_Claude_Particles;
-    private float minDistanceBetweenClaudeAndThePlayer;
+    public float minDistanceBetweenClaudeAndThePlayer;
+    private Coroutine claudeHitCoroutine;
 
     private void Start()
     {
@@ -35,6 +44,8 @@ public class Claude : MonoBehaviour
     
     void ChasePlayer()
     {
+        transform.position = new Vector3(transform.position.x, player.transform.position.y, player.transform.position.z);
+
         float distanceBetweenClaudeAndThePlayer = Vector3.Distance(transform.position, player.transform.position);
         if (distanceBetweenClaudeAndThePlayer >= maxDistanceBeweenClaudeAndThePlayer)
         {
@@ -43,6 +54,12 @@ public class Claude : MonoBehaviour
         else
         {
             transform.position = Vector3.MoveTowards(transform.position, player.transform.position, claudeBaseSpeed * Time.deltaTime);
+        }
+
+        if (distanceBetweenClaudeAndThePlayer <= minDistanceBetweenClaudeAndThePlayer && claudeHitCoroutine == null)
+        {
+            claudeHitsPlayer.Invoke();
+            claudeHitCoroutine = StartCoroutine(SlowClaudeAfterAHit());
         }
     }
 
@@ -54,5 +71,22 @@ public class Claude : MonoBehaviour
 
         VE_Claude_Cloud.playRate = Mathf.Lerp(2.5f, 1f, (distanceBetweenClaudeAndThePlayer - minDistanceBetweenClaudeAndThePlayer) / maxDistanceBeweenClaudeAndThePlayer);
         VE_Claude_Particles.playRate = Mathf.Lerp(2.5f, 1f, (distanceBetweenClaudeAndThePlayer - minDistanceBetweenClaudeAndThePlayer) / maxDistanceBeweenClaudeAndThePlayer);
+    }
+
+    private IEnumerator SlowClaudeAfterAHit()
+    {
+        float tempSpeed = claudeBaseSpeed;
+
+        claudeBaseSpeed = claudeSlowSpeed;
+        yield return new WaitForSeconds(slowDuration);
+        claudeBaseSpeed = tempSpeed;
+        claudeHitCoroutine = null;
+
+        yield return null;
+    }
+
+    public float GetMinDistanceBetweenClaudeAndThePlayer()
+    {
+        return minDistanceBetweenClaudeAndThePlayer;
     }
 }
