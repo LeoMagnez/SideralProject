@@ -10,6 +10,7 @@ using UnityEngine.VFX;
 public class movePlayer : MonoBehaviour
 {
     [Header("TOUCHE")]
+    [SerializeField]
     Vector3 dir = Vector3.zero;
     Vector3 dirRotation;
     float buttonBoost ; 
@@ -56,7 +57,7 @@ public class movePlayer : MonoBehaviour
         warpSpeedVFX.SetFloat("WarpAmount", 0);
     }
     void Update()
-    {
+    {/*
         ///////////////////// LA COROUTINES SERT A REDRESSER LE VAISSEAU LORSQUE LE JOUEUR LACHE LA MANETTE : FONCTIONNE UNIQUEMENT DU COTE GAUCHE ET DROITE/////////////////////////// 
         float detectionFloor = 0.05f;
 
@@ -141,11 +142,11 @@ public class movePlayer : MonoBehaviour
                 StartCoroutine(ActivateParticles());
                 speed = speed - 800f * Time.deltaTime ; 
             }
-           /* else if(speed <= speedOrigine){
+           // else if(speed <= speedOrigine){
 
-                speed = speedOrigine * molletteVitesse/2 ; 
+              //  speed = speedOrigine * molletteVitesse/2 ; 
 
-            }  */  
+            //}    
         }
         if(turbo < turboMax){
 
@@ -157,7 +158,10 @@ public class movePlayer : MonoBehaviour
         ///////////////////// DEPLACEMENT POUR LE GAMEOBJECT  /////////////////////////// 
 
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        */
 
+        UpdateTargetRotation();
+        UpdateCurRotation();
     }
 
         /////////////////////// COROUTINES ////////////////
@@ -186,7 +190,7 @@ public class movePlayer : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
-        yield return null;
+        resetPositionCoroutine = null;
     }
         /////////////////////// FIN ////////////////
 
@@ -197,12 +201,35 @@ public class movePlayer : MonoBehaviour
     public void stick(InputAction.CallbackContext context)
     {
         dir = context.ReadValue<Vector2>();
+        Debug.Log(dir);
     }
+
+    Quaternion targetRot;
+
+    private void UpdateTargetRotation()
+    {
+        float _maxTargetAngle = 45f;
+
+        Quaternion _curRotation = transform.rotation;
+
+        targetRot = _curRotation * Quaternion.Euler(dir.y * _maxTargetAngle, dir.x * _maxTargetAngle, 0);
+
+
+
+    }
+
+    private void UpdateCurRotation()
+    {
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, 0.1f * Time.deltaTime);
+
+    }
+
         /// DECLARATION FLECHE ///
 
     public void fleche(InputAction.CallbackContext context)
     {
         dirRotation = context.ReadValue<Vector2>();
+        Debug.Log(dirRotation);
     }
         /// DECLARATION BOUTON BOOST ///
 
@@ -216,8 +243,7 @@ public class movePlayer : MonoBehaviour
     {
         //// MOLETTE D'ORIGINE DE -1 A 1 , CONVERSION EN 0 A 1 ////////////////////
         molletteVitesse = context.ReadValue<float>() * - 1 + 1;
-   
-
+        Debug.Log(molletteVitesse);
     }
     
     //COROUTINE ACTIVATION DES PARTICULES DE VITESSE//
