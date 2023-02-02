@@ -64,10 +64,16 @@ public class movePlayer : MonoBehaviour
     }
     void Update()
     {
-        speed = Mathf.RoundToInt(speed);
-        speedNumber.SetText(speed.ToString());
+
         if (canControl)
         {
+            /////////////////////////// DISPLAY DE LA VITESSE SUR LE TABLEAU DE BORD ARRONDI A L'ENTIER LE + PROCHE ///////////////////////////
+            
+            speed = Mathf.RoundToInt(speed); 
+            speedNumber.SetText(speed.ToString());
+
+            /////////////////////////// FIN ///////////////////////////
+
             ///////////////////// LA COROUTINES SERT A REDRESSER LE VAISSEAU LORSQUE LE JOUEUR LACHE LA MANETTE : FONCTIONNE UNIQUEMENT DU COTE GAUCHE ET DROITE/////////////////////////// 
             float detectionFloor = 0.05f;
 
