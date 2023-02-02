@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
+using TMPro;
+using UnityEditor.Rendering;
 
 public class movePlayer : MonoBehaviour
 {
@@ -24,8 +26,10 @@ public class movePlayer : MonoBehaviour
 
 
     [Header("MOUVEMENT")]
+    public bool canControl;
     public float speed = 200f;
     public float speedMax = 1500f;
+    public TextMeshProUGUI speedNumber;
 
     float speedCurseurs = 1500f ;
     float speedOrigine = 200f;
@@ -53,118 +57,131 @@ public class movePlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        canControl = true; 
         speedOrigine = speed ;
         warpSpeedVFX.Stop();
         warpSpeedVFX.SetFloat("WarpAmount", 0);
     }
     void Update()
     {
-        ///////////////////// LA COROUTINES SERT A REDRESSER LE VAISSEAU LORSQUE LE JOUEUR LACHE LA MANETTE : FONCTIONNE UNIQUEMENT DU COTE GAUCHE ET DROITE/////////////////////////// 
-        float detectionFloor = 0.05f;
-
-        if (Mathf.Abs(dir.x) < detectionFloor && Mathf.Abs(dir.y) < detectionFloor)
+        speed = Mathf.RoundToInt(speed);
+        speedNumber.SetText(speed.ToString());
+        if (canControl)
         {
-            if (resetPositionCoroutine == null)
+            ///////////////////// LA COROUTINES SERT A REDRESSER LE VAISSEAU LORSQUE LE JOUEUR LACHE LA MANETTE : FONCTIONNE UNIQUEMENT DU COTE GAUCHE ET DROITE/////////////////////////// 
+            float detectionFloor = 0.05f;
+
+            if (Mathf.Abs(dir.x) < detectionFloor && Mathf.Abs(dir.y) < detectionFloor)
             {
-                resetPositionCoroutine = StartCoroutine(ResetPositionWhenNotPressingLeftOrRight());
+                if (resetPositionCoroutine == null)
+                {
+                    resetPositionCoroutine = StartCoroutine(ResetPositionWhenNotPressingLeftOrRight());
+                }
             }
-        }
 
-        else
-        {
-            if (resetPositionCoroutine != null)
-            {
-                StopCoroutine(resetPositionCoroutine);
-                resetPositionCoroutine = null;
-            }
-        ///////////////////// FIN /////////////////////////// 
-            
-        ///////////////////// DEPLACEMENT DU CURSEURS/////////////////////////// 
-
-            targetViseurs = new Vector2(dir.x * speedCurseurs, dir.y * -speedCurseurs);
-            posInitViseurs = Vector2.Lerp(posInitViseurs, targetViseurs, Time.deltaTime);
-            curseurs.anchoredPosition = (Vector2)posInitViseurs * Time.deltaTime;
-        ///////////////////// FIN /////////////////////////// 
-        ///////////////////// LE GAMEOBJECT QUI CONTIENT, LE VAISSEAU, LA CAM ET LE CANVAS REGARDE TOUJOURS VERS LE CURSEURS/////////////////////////// 
-
-            transform.LookAt(curseurs, transform.up);
-        ///////////////////// FIN /////////////////////////// 
-
-        ///////////////////// ROTATIONS DU VAISSEAU /////////////////////////// 
-
-            currentAngle = vaisseau.transform.eulerAngles;
-            targetAngle = new Vector3(currentAngle.x , currentAngle.y, currentAngle.z - 180f * dir.x * Time.deltaTime);
-
-        ///////////////////// BLOQUE LES ROTATIONS GAUCHE ET DROITE A 45° /////////////////////////// 
-
-            if (vaisseau.transform.eulerAngles.z >= 45 && vaisseau.transform.eulerAngles.z <= 150f && targetAngle.z > currentAngle.z || vaisseau.transform.eulerAngles.z <= 315f && vaisseau.transform.eulerAngles.z >= 150 && targetAngle.z < currentAngle.z)
-            {
-                targetRotation = Quaternion.Euler(currentAngle);
-            }
             else
             {
-                targetRotation = Quaternion.Euler(targetAngle);
+                if (resetPositionCoroutine != null)
+                {
+                    StopCoroutine(resetPositionCoroutine);
+                    resetPositionCoroutine = null;
+                }
+                ///////////////////// FIN /////////////////////////// 
+
+                ///////////////////// DEPLACEMENT DU CURSEURS/////////////////////////// 
+
+                targetViseurs = new Vector2(dir.x * speedCurseurs, dir.y * -speedCurseurs);
+                posInitViseurs = Vector2.Lerp(posInitViseurs, targetViseurs, Time.deltaTime);
+                curseurs.anchoredPosition = (Vector2)posInitViseurs * Time.deltaTime;
+                ///////////////////// FIN /////////////////////////// 
+                ///////////////////// LE GAMEOBJECT QUI CONTIENT, LE VAISSEAU, LA CAM ET LE CANVAS REGARDE TOUJOURS VERS LE CURSEURS/////////////////////////// 
+
+                transform.LookAt(curseurs, transform.up);
+                ///////////////////// FIN /////////////////////////// 
+
+                ///////////////////// ROTATIONS DU VAISSEAU /////////////////////////// 
+
+                currentAngle = vaisseau.transform.eulerAngles;
+                targetAngle = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 180f * dir.x * Time.deltaTime);
+
+                ///////////////////// BLOQUE LES ROTATIONS GAUCHE ET DROITE A 45° /////////////////////////// 
+
+                if (vaisseau.transform.eulerAngles.z >= 45 && vaisseau.transform.eulerAngles.z <= 150f && targetAngle.z > currentAngle.z || vaisseau.transform.eulerAngles.z <= 315f && vaisseau.transform.eulerAngles.z >= 150 && targetAngle.z < currentAngle.z)
+                {
+                    targetRotation = Quaternion.Euler(currentAngle);
+                }
+                else
+                {
+                    targetRotation = Quaternion.Euler(targetAngle);
+                }
+                ///////////////////// FIN /////////////////////////// 
+                ///////////////////// ROTATION UNIQUEMENT POUR LE VAISSEAU ET LA CAMERA  /////////////////////////// 
+
+                vaisseau.transform.rotation = targetRotation;
+                cam.transform.rotation = targetRotation;
+
             }
-        ///////////////////// FIN /////////////////////////// 
-        ///////////////////// ROTATION UNIQUEMENT POUR LE VAISSEAU ET LA CAMERA  /////////////////////////// 
+            ///////////////////// FIN /////////////////////////// 
 
-            vaisseau.transform.rotation = targetRotation;
-            cam.transform.rotation = targetRotation;
+            ///////////////////// TURBO ET JAUGE DE LA MOLETTE SPEED /////////////////////////// 
 
-        }
-        ///////////////////// FIN /////////////////////////// 
+            /////////// SECURITE SI LA BARRE N'EST PAS DISPO ///////////// 
+            if (barreBoost != null)
+            {
 
-        ///////////////////// TURBO ET JAUGE DE LA MOLETTE SPEED /////////////////////////// 
+                barreBoost.fillAmount = turbo / turboMax;
 
-        /////////// SECURITE SI LA BARRE N'EST PAS DISPO ///////////// 
-        if(barreBoost != null){
-
-            barreBoost.fillAmount = turbo/turboMax ; 
-
-        }
-        /////////// FIN ///////////// 
-
-        if(buttonBoost == 1 && turbo > 0){
-
-            warpActive = true;
-            camFOV = Mathf.Lerp(camFOV, 70, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST ACTIF
-            cameraModifier.fieldOfView = camFOV;
-            turbo = turbo - 200f * Time.deltaTime;
-            StartCoroutine(ActivateParticles());
-
-            if(speed < speedMax){
-
-                speed = speed + 1000f * Time.deltaTime ; 
             }
-        }
-        else if(buttonBoost == 0 || turbo <= 0 ){
+            /////////// FIN ///////////// 
 
-            if(speed > speedOrigine){
+            if (buttonBoost == 1 && turbo > 0)
+            {
 
-                camFOV = Mathf.Lerp(camFOV, 60, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST INACTIF
+                warpActive = true;
+                camFOV = Mathf.Lerp(camFOV, 70, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST ACTIF
                 cameraModifier.fieldOfView = camFOV;
-                warpActive = false;
+                turbo = turbo - 200f * Time.deltaTime;
                 StartCoroutine(ActivateParticles());
-                speed = speed - 800f * Time.deltaTime ; 
+
+                if (speed < speedMax)
+                {
+
+                    speed = speed + 1000f * Time.deltaTime;
+                }
             }
-           /* else if(speed <= speedOrigine){
+            else if (buttonBoost == 0 || turbo <= 0)
+            {
 
-                speed = speedOrigine * molletteVitesse/2 ; 
+                if (speed > speedOrigine)
+                {
 
-            }  */  
+                    camFOV = Mathf.Lerp(camFOV, 60, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST INACTIF
+                    cameraModifier.fieldOfView = camFOV;
+                    warpActive = false;
+                    StartCoroutine(ActivateParticles());
+                    speed = speed - 800f * Time.deltaTime;
+                }
+                /* else if(speed <= speedOrigine){
+
+                     speed = speedOrigine * molletteVitesse/2 ; 
+
+                 }  */
+            }
+            if (turbo < turboMax)
+            {
+
+                turbo = turbo + 30f * Time.deltaTime;
+
+            }
+            ///////////////////// FIN /////////////////////////// 
+
+            ///////////////////// DEPLACEMENT POUR LE GAMEOBJECT  /////////////////////////// 
+
+            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
         }
-        if(turbo < turboMax){
-
-            turbo = turbo + 30f * Time.deltaTime ; 
-
-        }
-        ///////////////////// FIN /////////////////////////// 
-
-        ///////////////////// DEPLACEMENT POUR LE GAMEOBJECT  /////////////////////////// 
-
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
     }
+
 
         /////////////////////// COROUTINES ////////////////
     private IEnumerator ResetPositionWhenNotPressingLeftOrRight()

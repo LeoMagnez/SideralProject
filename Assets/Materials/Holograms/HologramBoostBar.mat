@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HologramKnobs 1
+  m_Name: HologramBoostBar
   m_Shader: {fileID: -6465566751694194690, guid: 787c9157a748a124aab8c1c21d53eed5,
     type: 3}
   m_ValidKeywords: []
@@ -46,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HologramImage:
-        m_Texture: {fileID: 2800000, guid: 4d929aac60dadde4ea24a62923c8113c, type: 3}
+        m_Texture: {fileID: 2800000, guid: ffe52b7094a75404fb907b10ed6b0d83, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HologramTex:
@@ -127,7 +127,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HologramColor: {r: 0, g: 5.62874, b: 16.586386, a: 1}
+    - _HologramColor: {r: 0, g: 9.713409, b: 16, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4801860811252793439

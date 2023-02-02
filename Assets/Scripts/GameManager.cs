@@ -24,5 +24,6 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Claude/Player collision !");
         player.TakeDamage(new Vector3(player.transform.position.x - claude.GetMinDistanceBetweenClaudeAndThePlayer(), player.transform.position.y, player.transform.position.z), claude.impactForce, claude.damage, claude.GetMinDistanceBetweenClaudeAndThePlayer()*2);
+        player.health -= 1; 
     }
 }
