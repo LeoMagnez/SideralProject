@@ -46,7 +46,7 @@ public class _movePlayer : MonoBehaviour
 
 
     private Coroutine impactCoroutine;
-    private bool siObjStop = false;
+    public bool siObjStop = false;
     public float tempsDeCollision = 1.5f; 
 
 
@@ -224,7 +224,7 @@ public class _movePlayer : MonoBehaviour
 
     private void UpdateTargetSpeed()
     {
-        if (buttonBoost > 0)
+        if (buttonBoost > 0 && siObjStop == false)
         {
             cameraFOV = Mathf.Lerp(cameraFOV, 80, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
@@ -241,6 +241,14 @@ public class _movePlayer : MonoBehaviour
             cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
             targetSpeed -= molletteVitesse * (speed * 10f) * Time.deltaTime;
+            StartCoroutine(ActivateParticles());
+            warpActive = false;
+        }
+        else if (targetSpeed < 200f && buttonBoost < 1)
+        {
+            cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
+            cameraFOVModifier.fieldOfView = cameraFOV;
+            targetSpeed = molletteVitesse * speed;
             StartCoroutine(ActivateParticles());
             warpActive = false;
         }
@@ -308,6 +316,7 @@ public class _movePlayer : MonoBehaviour
             if (collision.rigidbody.tag == "asteroideComplet")
             {
                 siObjStop = true;
+
                 if (impactCoroutine != null)
                 {
                     warpSpeedVFX.Stop();
@@ -324,13 +333,13 @@ public class _movePlayer : MonoBehaviour
         targetSpeed = 0;
         turbo = 0;
 
-        while (targetSpeed <= 1)
+        if(targetSpeed <= 1) 
         {
             targetSpeed += Time.deltaTime / tempsDeCollision;
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(tempsDeCollision);
         }
 
-        targetSpeed = 1;
+       // targetSpeed = 1;
         siObjStop = false;
         impactCoroutine = null;
 
