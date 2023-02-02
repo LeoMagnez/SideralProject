@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Torque",
+                    "type": "Value",
+                    "id": "b0b1a039-9b5f-46b2-b69e-a9dd7802269c",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -192,7 +201,7 @@
                     "path": "<Pointer>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Touch;Joystick;Gamepad;XR",
+                    "groups": "Touch;Gamepad;XR",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -276,12 +285,23 @@
                 },
                 {
                     "name": "",
-                    "id": "87f119ff-f3c3-4522-8612-37e4852f293f",
-                    "path": "<Keyboard>/q",
+                    "id": "6a363bd1-e4b3-4169-bc34-b0b390ffffc4",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Molette",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "56a399b5-97d4-4bfc-ac62-252047e673bc",
+                    "path": "<HID::Microsoft SideWinder Precision 2 Joystick>/rz",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Joystick",
+                    "action": "Torque",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
