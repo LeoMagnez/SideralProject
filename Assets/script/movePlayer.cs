@@ -19,6 +19,8 @@ public class movePlayer : MonoBehaviour
     public VisualEffect warpSpeedVFX;
     private bool warpActive;
     public float rate = 0.02f;
+    public Camera cameraModifier; // RECUPERE LA MAIN CAMERA DANS LE BUT DE CHANGER LE FOV PENDANT LE BOOST
+    public float camFOV;
 
 
     [Header("MOUVEMENT")]
@@ -27,8 +29,8 @@ public class movePlayer : MonoBehaviour
 
     float speedCurseurs = 1500f ;
     float speedOrigine = 200f;
-    float turbo = 500f;
-    float turboMax = 500f;
+    float turbo = 1000f;
+    float turboMax = 1000f;
     public GameObject vaisseau ; 
     public GameObject cam ;   
     public Image barreBoost ; 
@@ -125,6 +127,8 @@ public class movePlayer : MonoBehaviour
         if(buttonBoost == 1 && turbo > 0){
 
             warpActive = true;
+            camFOV = Mathf.Lerp(camFOV, 70, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST ACTIF
+            cameraModifier.fieldOfView = camFOV;
             turbo = turbo - 200f * Time.deltaTime;
             StartCoroutine(ActivateParticles());
 
@@ -137,6 +141,8 @@ public class movePlayer : MonoBehaviour
 
             if(speed > speedOrigine){
 
+                camFOV = Mathf.Lerp(camFOV, 60, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST INACTIF
+                cameraModifier.fieldOfView = camFOV;
                 warpActive = false;
                 StartCoroutine(ActivateParticles());
                 speed = speed - 800f * Time.deltaTime ; 
