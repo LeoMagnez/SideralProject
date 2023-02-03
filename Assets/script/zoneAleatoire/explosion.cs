@@ -5,21 +5,36 @@ using UnityEngine;
 public class explosion : MonoBehaviour
 {
     // Start is called before the first frame update
+  Rigidbody Objectfracture ;
+
+Rigidbody rgPlayer ;  
     void Start()
     {
         
+     Objectfracture = gameObject.GetComponent<Rigidbody>();
+     rgPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
 
 
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        Rigidbody Objectfracture = gameObject.GetComponent<Rigidbody>();
-        Objectfracture.AddExplosionForce(5, transform.forward, 7, 4);
+      /// Objectfracture.AddExplosionForce(20,transform.position, 30f, 100f);
+    //Objectfracture.AddForce(transform.up * 1000f);
 
-            //Objectfracture.AddForce(-transform.up * Random.Range(15 , 20));
 
     }
+
+ void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            rgPlayer.AddExplosionForce(15f,transform.position, 1000f, 3f , ForceMode.Impulse);
+        }
+        if(collision.rigidbody){
+            collision.rigidbody.AddExplosionForce(5f,transform.position, 1000f, 3f , ForceMode.Impulse);            
+        }
+    }    
+        
 }

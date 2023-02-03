@@ -6,6 +6,8 @@ public class rocherEffet : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject fracture ; 
+    public MeshRenderer visual ; 
+
     void Start()
     {
 
@@ -21,9 +23,10 @@ public class rocherEffet : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-            Debug.Log("fekf,") ; 
+//            Debug.Log("fekf,") ; 
             fracture.SetActive(true) ; 
             //spwan.poolFracture[0].transform.position = transform.position ; 
-            gameObject.SetActive(false) ; 
+           // visual.enabled = false ;
+            gameObject.SetActive(false) ;  
     }    
 }

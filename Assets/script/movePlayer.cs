@@ -6,57 +6,35 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
-using System.ComponentModel;
-using UnityEngine.Rendering;
+using TMPro;
+using UnityEditor.Rendering;
 
 public class movePlayer : MonoBehaviour
 {
     [Header("TOUCHE")]
-    [SerializeField]
-    [ReadOnly(true)]
     Vector3 dir = Vector3.zero;
     Vector3 dirRotation;
-    float buttonBoost ;
-
-    [SerializeField]
-    [ReadOnly(true)]
+    float buttonBoost ; 
     float molletteVitesse ;
-
-
-    // COUCOU C'EST MOI
-
-
-    [SerializeField]
-    float rotationSpeed = 1f;
-
-
-    [SerializeField]
-    RectTransform cursorTransform;
-
-
-    //
-
-
-
-
-
-
-
 
     [Header("WARPVFX")]
     public VisualEffect warpSpeedVFX;
     private bool warpActive;
     public float rate = 0.02f;
+    public Camera cameraModifier; // RECUPERE LA MAIN CAMERA DANS LE BUT DE CHANGER LE FOV PENDANT LE BOOST
+    public float camFOV;
 
 
     [Header("MOUVEMENT")]
+    public bool canControl;
     public float speed = 200f;
     public float speedMax = 1500f;
+    public TextMeshProUGUI speedNumber;
 
     float speedCurseurs = 1500f ;
     float speedOrigine = 200f;
-    float turbo = 500f;
-    float turboMax = 500f;
+    float turbo = 1000f;
+    float turboMax = 1000f;
     public GameObject vaisseau ; 
     public GameObject cam ;   
     public Image barreBoost ; 
@@ -79,158 +57,198 @@ public class movePlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        canControl = true; 
         speedOrigine = speed ;
         warpSpeedVFX.Stop();
         warpSpeedVFX.SetFloat("WarpAmount", 0);
     }
     void Update()
     {
-        UpdateTargetRotation();
-        UpdateCurRotation();
-        UpdateCursorPosition();
 
+        if (canControl)
+        {
+            /////////////////////////// DISPLAY DE LA VITESSE SUR LE TABLEAU DE BORD ARRONDI A L'ENTIER LE + PROCHE ///////////////////////////
+            
+            speed = Mathf.RoundToInt(speed); 
+            speedNumber.SetText(speed.ToString());
 
-        //Speed
-        UpdateTargetSpeed();
-        UpdateSpeed();
+            /////////////////////////// FIN ///////////////////////////
 
-        float _distanceParcouredInOneFrame = curSpeed * Time.deltaTime;
+            ///////////////////// LA COROUTINES SERT A REDRESSER LE VAISSEAU LORSQUE LE JOUEUR LACHE LA MANETTE : FONCTIONNE UNIQUEMENT DU COTE GAUCHE ET DROITE/////////////////////////// 
+            float detectionFloor = 0.05f;
 
-        transform.position += transform.forward * _distanceParcouredInOneFrame;
+            if (Mathf.Abs(dir.x) < detectionFloor && Mathf.Abs(dir.y) < detectionFloor)
+            {
+                if (resetPositionCoroutine == null)
+                {
+                    resetPositionCoroutine = StartCoroutine(ResetPositionWhenNotPressingLeftOrRight());
+                }
+            }
+
+            else
+            {
+                if (resetPositionCoroutine != null)
+                {
+                    StopCoroutine(resetPositionCoroutine);
+                    resetPositionCoroutine = null;
+                }
+                ///////////////////// FIN /////////////////////////// 
+
+                ///////////////////// DEPLACEMENT DU CURSEURS/////////////////////////// 
+
+                targetViseurs = new Vector2(dir.x * speedCurseurs, dir.y * -speedCurseurs);
+                posInitViseurs = Vector2.Lerp(posInitViseurs, targetViseurs, Time.deltaTime);
+                curseurs.anchoredPosition = (Vector2)posInitViseurs * Time.deltaTime;
+                ///////////////////// FIN /////////////////////////// 
+                ///////////////////// LE GAMEOBJECT QUI CONTIENT, LE VAISSEAU, LA CAM ET LE CANVAS REGARDE TOUJOURS VERS LE CURSEURS/////////////////////////// 
+
+                transform.LookAt(curseurs, transform.up);
+                ///////////////////// FIN /////////////////////////// 
+
+                ///////////////////// ROTATIONS DU VAISSEAU /////////////////////////// 
+
+                currentAngle = vaisseau.transform.eulerAngles;
+                targetAngle = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 180f * dir.x * Time.deltaTime);
+
+                ///////////////////// BLOQUE LES ROTATIONS GAUCHE ET DROITE A 45° /////////////////////////// 
+
+                if (vaisseau.transform.eulerAngles.z >= 45 && vaisseau.transform.eulerAngles.z <= 150f && targetAngle.z > currentAngle.z || vaisseau.transform.eulerAngles.z <= 315f && vaisseau.transform.eulerAngles.z >= 150 && targetAngle.z < currentAngle.z)
+                {
+                    targetRotation = Quaternion.Euler(currentAngle);
+                }
+                else
+                {
+                    targetRotation = Quaternion.Euler(targetAngle);
+                }
+                ///////////////////// FIN /////////////////////////// 
+                ///////////////////// ROTATION UNIQUEMENT POUR LE VAISSEAU ET LA CAMERA  /////////////////////////// 
+
+                vaisseau.transform.rotation = targetRotation;
+                cam.transform.rotation = targetRotation;
+
+            }
+            ///////////////////// FIN /////////////////////////// 
+
+            ///////////////////// TURBO ET JAUGE DE LA MOLETTE SPEED /////////////////////////// 
+
+            /////////// SECURITE SI LA BARRE N'EST PAS DISPO ///////////// 
+            if (barreBoost != null)
+            {
+
+                barreBoost.fillAmount = turbo / turboMax;
+
+            }
+            /////////// FIN ///////////// 
+
+            if (buttonBoost == 1 && turbo > 0)
+            {
+
+                warpActive = true;
+                camFOV = Mathf.Lerp(camFOV, 70, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST ACTIF
+                cameraModifier.fieldOfView = camFOV;
+                turbo = turbo - 200f * Time.deltaTime;
+                StartCoroutine(ActivateParticles());
+
+                if (speed < speedMax)
+                {
+
+                    speed = speed + 1000f * Time.deltaTime;
+                }
+            }
+            else if (buttonBoost == 0 || turbo <= 0)
+            {
+
+                if (speed > speedOrigine)
+                {
+
+                    camFOV = Mathf.Lerp(camFOV, 60, 0.01f); //LERP LE FOV DE LA CAM LORSQUE LE BOOST EST INACTIF
+                    cameraModifier.fieldOfView = camFOV;
+                    warpActive = false;
+                    StartCoroutine(ActivateParticles());
+                    speed = speed - 800f * Time.deltaTime;
+                }
+                /* else if(speed <= speedOrigine){
+
+                     speed = speedOrigine * molletteVitesse/2 ; 
+
+                 }  */
+            }
+            if (turbo < turboMax)
+            {
+
+                turbo = turbo + 30f * Time.deltaTime;
+
+            }
+            ///////////////////// FIN /////////////////////////// 
+
+            ///////////////////// DEPLACEMENT POUR LE GAMEOBJECT  /////////////////////////// 
+
+            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+        }
     }
 
-    
 
-    //////////// DECLARATION DES INPUTS /////////////
+        /////////////////////// COROUTINES ////////////////
+    private IEnumerator ResetPositionWhenNotPressingLeftOrRight()
+    {
+        float replacementRatio = 0.98f;
+        float acceptableFloor = 0.05f;
 
-    /// DECLARATION DU STICK ///
+        while (vaisseau.transform.eulerAngles.z > 150 && Mathf.Abs(vaisseau.transform.eulerAngles.z - 360) >= acceptableFloor  || vaisseau.transform.eulerAngles.z >= acceptableFloor)
+        {
 
-    // ROTATION // ---------------------------------------------------------------------------------------------------------------------
+            Quaternion vaisseauRotation = Quaternion.identity;
 
-    Vector2 curTargetDir = Vector2.zero;
+            if (vaisseau.transform.eulerAngles.z > 150)
+            {
+                vaisseauRotation = Quaternion.Euler(new Vector3(/* X */ vaisseau.transform.eulerAngles.x, /* Y */ vaisseau.transform.eulerAngles.y, /* Z */ Mathf.Lerp(360f, vaisseau.transform.eulerAngles.z, replacementRatio)));
+            }
+            else
+            {
+                 vaisseauRotation = Quaternion.Euler(new Vector3(/* X */ vaisseau.transform.eulerAngles.x, /* Y */ vaisseau.transform.eulerAngles.y, /* Z */ Mathf.Lerp(0f, vaisseau.transform.eulerAngles.z, replacementRatio)));
+            }
+
+            vaisseau.transform.rotation = vaisseauRotation;
+            cam.transform.rotation = vaisseauRotation;
+
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        yield return null;
+    }
+        /////////////////////// FIN ////////////////
+
+        //////////// DECLARATION DES INPUTS /////////////
+
+        /// DECLARATION DU STICK ///
 
     public void stick(InputAction.CallbackContext context)
     {
         dir = context.ReadValue<Vector2>();
-        Debug.Log(dir);
     }
-
-    float dirTorque = 0f;
-    float curDirTorque = 0f;
-    
-    public void TorqueInput(InputAction.CallbackContext context)
-    {
-        //// MOLETTE D'ORIGINE DE -1 A 1 , CONVERSION EN 0 A 1 ////////////////////
-        ///A inverser aussi
-        dirTorque = -context.ReadValue<float>();
-    }
-
-
-    Quaternion targetRot;
-
-    [SerializeField]
-    [Tooltip("Vitesse de transition des rotations visées")]
-    [Range(0.1f,5f)]
-    float targetRotationAccelerationSpeed = 0.2f;
-
-
-    private void UpdateTargetRotation()
-    {
-        //pourrait être dans une autre fonction, mais ppour l'instant s'pratique ici
-
-        curTargetDir = Vector2.Lerp(curTargetDir, dir, targetRotationAccelerationSpeed * Time.deltaTime);
-        curDirTorque = Mathf.Lerp(dirTorque, curDirTorque, targetRotationAccelerationSpeed*5 * Time.deltaTime);
-        //
-
-        float _maxTargetTorqueAngle = 50f;
-
-        float _maxTargetAngle = 45f;
-
-
-        Quaternion _curRotation = transform.rotation;
-
-        targetRot = _curRotation * Quaternion.Euler(curTargetDir.y * _maxTargetAngle, curTargetDir.x * _maxTargetAngle, curDirTorque * _maxTargetTorqueAngle);
-
-
-    }
-
-    [SerializeField]
-    [Tooltip("Vitesse de transition de rotation, de la rotation actuelle vers la rotation visée")]
-    [Range(0.1f, 5f)]
-    float rotationAccelerationSpeed = 0.2f;
-
-    private void UpdateCurRotation()
-    {
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
-    }
-
-
-    private void UpdateCursorPosition()
-    {
-        float _cursorMaxDist = 50f;
-        cursorTransform.localPosition = new Vector3 (curTargetDir.x * _cursorMaxDist, -curTargetDir.y * _cursorMaxDist,0);
-    }
-
-    //--------------------------------------------------------------------------------------------------------------------------------------------
-
         /// DECLARATION FLECHE ///
 
     public void fleche(InputAction.CallbackContext context)
     {
         dirRotation = context.ReadValue<Vector2>();
-        Debug.Log(dirRotation);
     }
         /// DECLARATION BOUTON BOOST ///
 
     public void boostButton(InputAction.CallbackContext context)
     {
         buttonBoost = context.ReadValue<float>();
-    }
-    /// DECLARATION MOLETTE ///
-
-
-
-
-    // SPEED // ---------------------------------------------------------------------------------------------------------------------
-
-    [SerializeField]
-    [Tooltip("Acceleration/deceleration")]
-    [Range(0.1f, 5f)]
-    float acceleration = 0.2f;
+    } 
+        /// DECLARATION MOLETTE ///
 
     public void vitesseButton(InputAction.CallbackContext context)
     {
         //// MOLETTE D'ORIGINE DE -1 A 1 , CONVERSION EN 0 A 1 ////////////////////
-        ///A inverser aussi
-        molletteVitesse = (context.ReadValue<float>() * -1 + 1) * 0.5f;
-    }
-
-    float targetSpeed = 0f;
-
-    float curSpeed = 0f;
-
-    private void UpdateTargetSpeed()
-    {
-        if (buttonBoost > 0)
-        {
-            targetSpeed = molletteVitesse * (speed * 10);
-            StartCoroutine(ActivateParticles());
-            warpActive = true;
-        }
-        else
-        targetSpeed = molletteVitesse * speed;
-        warpActive = false;
+        molletteVitesse = context.ReadValue<float>() * - 1 + 1;
+   
 
     }
-
-    private void UpdateSpeed()
-    { 
-        curSpeed = Mathf.Lerp(curSpeed, targetSpeed, acceleration * Time.deltaTime);
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------
-
-
+    
     //COROUTINE ACTIVATION DES PARTICULES DE VITESSE//
     IEnumerator ActivateParticles()
     {
@@ -271,199 +289,7 @@ public class movePlayer : MonoBehaviour
             }
         }
     }
-}
 
-
-
-
-
-///////////////////////------------------------------------ ARCHIVES ------------------------------------////////////////
-
-/*/////////////////////// COROUTINES ////////////////
-    private IEnumerator ResetPositionWhenNotPressingLeftOrRight()
-    {
-        float replacementRatio = 0.98f;
-        float acceptableFloor = 0.05f;
-
-        while (vaisseau.transform.eulerAngles.z > 150 && Mathf.Abs(vaisseau.transform.eulerAngles.z - 360) >= acceptableFloor  || vaisseau.transform.eulerAngles.z >= acceptableFloor)
-        {
-
-            Quaternion vaisseauRotation = Quaternion.identity;
-
-            if (vaisseau.transform.eulerAngles.z > 150)
-            {
-                vaisseauRotation = Quaternion.Euler(new Vector3(*//* X *//*
-vaisseau.transform.eulerAngles.x, *//* Y *//* vaisseau.transform.eulerAngles.y, *//* Z *//* Mathf.Lerp(360f, vaisseau.transform.eulerAngles.z, replacementRatio)));
-            }
-            else
-{
-    vaisseauRotation = Quaternion.Euler(new Vector3(*//* X *//* vaisseau.transform.eulerAngles.x, *//* Y *//* vaisseau.transform.eulerAngles.y, *//* Z *//* Mathf.Lerp(0f, vaisseau.transform.eulerAngles.z, replacementRatio)));
-}
-
-vaisseau.transform.rotation = vaisseauRotation;
-cam.transform.rotation = vaisseauRotation;
-
-yield return new WaitForSeconds(0.01f);
-        }
-
-        resetPositionCoroutine = null;
-    }
-    /////////////////////// FIN ////////////////*/
-///
-
-///////////////////// LA COROUTINES SERT A REDRESSER LE VAISSEAU LORSQUE LE JOUEUR LACHE LA MANETTE : FONCTIONNE UNIQUEMENT DU COTE GAUCHE ET DROITE/////////////////////////// 
-/*float detectionFloor = 0.05f;
-
-if (Mathf.Abs(dir.x) < detectionFloor && Mathf.Abs(dir.y) < detectionFloor)
-{
-    if (resetPositionCoroutine == null)
-    {
-        resetPositionCoroutine = StartCoroutine(ResetPositionWhenNotPressingLeftOrRight());
-    }
-}
-
-else
-{
-    if (resetPositionCoroutine != null)
-    {
-        StopCoroutine(resetPositionCoroutine);
-        resetPositionCoroutine = null;
-    }
-    ///////////////////// FIN /////////////////////////// 
-
-    ///////////////////// DEPLACEMENT DU CURSEURS/////////////////////////// 
-
-    targetViseurs = new Vector2(dir.x * speedCurseurs, dir.y * -speedCurseurs);
-    posInitViseurs = Vector2.Lerp(posInitViseurs, targetViseurs, Time.deltaTime);
-    curseurs.anchoredPosition = (Vector2)posInitViseurs * Time.deltaTime;
-    ///////////////////// FIN /////////////////////////// 
-    ///////////////////// LE GAMEOBJECT QUI CONTIENT, LE VAISSEAU, LA CAM ET LE CANVAS REGARDE TOUJOURS VERS LE CURSEURS/////////////////////////// 
-
-    transform.LookAt(curseurs, transform.up);
-    ///////////////////// FIN /////////////////////////// 
-
-    ///////////////////// ROTATIONS DU VAISSEAU /////////////////////////// 
-
-    currentAngle = vaisseau.transform.eulerAngles;
-    targetAngle = new Vector3(currentAngle.x, currentAngle.y, currentAngle.z - 180f * dir.x * Time.deltaTime);
-
-    ///////////////////// BLOQUE LES ROTATIONS GAUCHE ET DROITE A 45° /////////////////////////// 
-
-    if (vaisseau.transform.eulerAngles.z >= 45 && vaisseau.transform.eulerAngles.z <= 150f && targetAngle.z > currentAngle.z || vaisseau.transform.eulerAngles.z <= 315f && vaisseau.transform.eulerAngles.z >= 150 && targetAngle.z < currentAngle.z)
-    {
-        targetRotation = Quaternion.Euler(currentAngle);
-    }
-    else
-    {
-        targetRotation = Quaternion.Euler(targetAngle);
-    }
-    ///////////////////// FIN /////////////////////////// 
-    ///////////////////// ROTATION UNIQUEMENT POUR LE VAISSEAU ET LA CAMERA  /////////////////////////// 
-
-    vaisseau.transform.rotation = targetRotation;
-    cam.transform.rotation = targetRotation;
+        //////////// FIN /////////////        
 
 }
-/////////// SECURITE SI LA BARRE N'EST PAS DISPO ///////////// 
-        if (barreBoost != null)
-        {
-
-            barreBoost.fillAmount = turbo / turboMax;
-
-        }
-        /////////// FIN ///////////// 
-
-        if (buttonBoost == 1 && turbo > 0)
-        {
-
-            warpActive = true;
-            turbo = turbo - 200f * Time.deltaTime;
-            StartCoroutine(ActivateParticles());
-
-            if (speed < speedMax)
-            {
-
-                speed = speed + 1000f * Time.deltaTime;
-            }
-        }
-        else if (buttonBoost == 0 || turbo <= 0)
-        {
-
-            if (speed > speedOrigine)
-            {
-
-                warpActive = false;
-                StartCoroutine(ActivateParticles());
-                speed = speed - 800f * Time.deltaTime;
-            }
-            // else if(speed <= speedOrigine){
-
-            //  speed = speedOrigine * molletteVitesse/2 ; 
-
-            //}    
-        }
-        if (turbo < turboMax)
-        {
-
-            turbo = turbo + 30f * Time.deltaTime;
-
-        }
-///////////////////// FIN /////////////////////////// 
-
-///////////////////// TURBO ET JAUGE DE LA MOLETTE SPEED /////////////////////////// 
-
-/////////// SECURITE SI LA BARRE N'EST PAS DISPO ///////////// 
-if (barreBoost != null)
-{
-
-    barreBoost.fillAmount = turbo / turboMax;
-
-}
-/////////// FIN ///////////// 
-
-if (buttonBoost == 1 && turbo > 0)
-{
-
-    warpActive = true;
-    turbo = turbo - 200f * Time.deltaTime;
-    StartCoroutine(ActivateParticles());
-
-    if (speed < speedMax)
-    {
-
-        speed = speed + 1000f * Time.deltaTime;
-    }
-}
-else if (buttonBoost == 0 || turbo <= 0)
-{
-
-    if (speed > speedOrigine)
-    {
-
-        warpActive = false;
-        StartCoroutine(ActivateParticles());
-        speed = speed - 800f * Time.deltaTime;
-    }
-    // else if(speed <= speedOrigine){
-
-    //  speed = speedOrigine * molletteVitesse/2 ; 
-
-    //}    
-}
-if (turbo < turboMax)
-{
-
-    turbo = turbo + 30f * Time.deltaTime;
-
-}
-///////////////////// FIN /////////////////////////// 
-
-///////////////////// DEPLACEMENT POUR LE GAMEOBJECT  /////////////////////////// 
-
-transform.Translate(Vector3.forward * speed * Time.deltaTime);
-*/
-
-
-//Rotation
-
-/**/
