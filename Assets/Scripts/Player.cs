@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
-    public float maxHealth = 4;
+    public float maxHealth = 100;
 
     
     public float health;
 
     private Rigidbody rb;
+
+    public TextMeshProUGUI healthText;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +25,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        healthText.SetText(health.ToString());
     }
 
     public void TakeDamage(Vector3 impactPosition, float impactForce, float damage, float explosionRadius)

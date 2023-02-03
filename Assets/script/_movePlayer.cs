@@ -60,13 +60,14 @@ public class _movePlayer : MonoBehaviour
 
 
     [Header("MOUVEMENT")]
+    public bool canTurbo;
     public float speed = 200f;
     public float speedMax = 1500f;
 
     float speedCurseurs = 1500f;
     float speedOrigine = 200f;
-    float turbo = 500f;
-    float turboMax = 500f;
+    float turbo = 1000f;
+    float turboMax = 1000f;
     public GameObject vaisseau;
     public GameObject cam;
     public Image barreBoost;
@@ -103,6 +104,11 @@ public class _movePlayer : MonoBehaviour
         //Speed
         UpdateTargetSpeed();
         UpdateSpeed();
+
+        if(barreBoost != null)
+        {
+            barreBoost.fillAmount = turbo / turboMax;
+        }
 
         targetSpeed = Mathf.RoundToInt(targetSpeed);
         speedText.SetText(targetSpeed.ToString());
@@ -224,34 +230,54 @@ public class _movePlayer : MonoBehaviour
 
     private void UpdateTargetSpeed()
     {
-        if (buttonBoost > 0 && siObjStop == false)
+        if (canTurbo)
         {
-            cameraFOV = Mathf.Lerp(cameraFOV, 80, 0.01f);
-            cameraFOVModifier.fieldOfView = cameraFOV;
-            if(targetSpeed < 2000f)
+            if ((buttonBoost > 0 && siObjStop == false ) && turbo > 0)
             {
-                targetSpeed += molletteVitesse * (speed * 10f) * Time.deltaTime;
-            }
+                AudioManager.instance.PlaySFX("Hyperdrive");
+                cameraFOV = Mathf.Lerp(cameraFOV, 80, 0.01f);
+                cameraFOVModifier.fieldOfView = cameraFOV;
+                turbo = turbo - 100f * Time.deltaTime;
 
-            StartCoroutine(ActivateParticles());
-            warpActive = true;
+                if (targetSpeed < 2000f)
+                {
+                    targetSpeed += molletteVitesse * (speed * 10f) * Time.deltaTime;
+                }
+
+                StartCoroutine(ActivateParticles());
+                warpActive = true;
+            }
         }
-        else if (targetSpeed > 200f && buttonBoost < 1)
+
+        else if (targetSpeed > 200f && buttonBoost < 1 || turbo <= 0)
         {
+            AudioManager.instance.StopSFX("Hyperdrive");
             cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
             targetSpeed -= molletteVitesse * (speed * 10f) * Time.deltaTime;
             StartCoroutine(ActivateParticles());
             warpActive = false;
         }
-        else if (targetSpeed < 200f && buttonBoost < 1)
+        else if (targetSpeed < 200f && buttonBoost < 1 || turbo <= 0)
         {
             cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
-            targetSpeed = molletteVitesse * speed;
+            targetSpeed = molletteVitesse * (speed * 2);
             StartCoroutine(ActivateParticles());
             warpActive = false;
         }
+
+        if(turbo <= turboMax) //tentative de limitation du turbo, ça marche pas
+        {
+            canTurbo = false;
+            turbo = turbo + 30f * Time.deltaTime;
+        }
+
+        if(turbo > 100)
+        {
+            canTurbo = true;
+        }
+
 
 
 
