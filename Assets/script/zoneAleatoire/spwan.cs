@@ -12,7 +12,12 @@ public class spwan : MonoBehaviour
    public GameObject player ;
    GameObject[] pool ;
 
-   float detectionRadius ;          
+   float detectionRadius ;
+   float timer = 0;
+   bool siIlEstActive = false;
+   bool siIlsOntSpawn = false;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,8 +35,8 @@ public class spwan : MonoBehaviour
         for (int i = 0; i < pool.Length; i++)
         {
             pool[i] = Instantiate(prefabQuiApparait, new Vector3(Random.Range(gameObject.transform.position.x + -gameObject.transform.localScale.x /2 , gameObject.transform.position.x + gameObject.transform.localScale.x /2),Random.Range(gameObject.transform.position.y -gameObject.transform.localScale.y /2 ,gameObject.transform.position.y + gameObject.transform.localScale.y /2),Random.Range(gameObject.transform.position.z -gameObject.transform.localScale.z /2 , gameObject.transform.position.z + gameObject.transform.localScale.z /2)) , Quaternion.identity , dossierRangement.transform) ;
-        }       
-        
+            pool[i].transform.localScale = new Vector3(0f, 0f, 0f) ;
+        }
     }
 
     // Update is called once per frame
@@ -46,10 +51,30 @@ public class spwan : MonoBehaviour
         }
         else 
         {
+            siIlEstActive = true;
+
+            timer = timer + 1f * Time.deltaTime;
             for (int i = 0; i < pool.Length; i++)
             {
-                pool[i].SetActive(true) ; 
-            }             
+                pool[i].SetActive(true);
+            }
+
+            if (siIlEstActive == true && timer < 1) 
+            {
+                for (int i = 0; i < pool.Length; i++)
+                {
+                    pool[i].transform.localScale += new Vector3(0.05f,0.05f,0.05f);
+                }
+            }
+            else if(timer > 1 && siIlsOntSpawn == false)
+            {
+                for (int i = 0; i < pool.Length; i++)
+                {
+                    pool[i].transform.localScale = new Vector3(Random.Range(1f, 10f), Random.Range(1f, 10f), Random.Range(1f, 10f));
+                }
+                siIlsOntSpawn = true;
+            }
+            Debug.Log("timer + " + timer); 
         }
     }
 
