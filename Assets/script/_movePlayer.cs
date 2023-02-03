@@ -71,6 +71,11 @@ public class _movePlayer : MonoBehaviour
     public GameObject vaisseau;
     public GameObject cam;
     public Image barreBoost;
+
+    float targetSpeed = 0f ;
+
+    float curSpeed = 0f;
+
     ///////// CURSEURS INVISIBLE, LE VAISSEAU SUIT CES MOUVEMENTS ///////////// 
     public RectTransform curseurs;
     Vector3 posInitViseurs = Vector3.zero;
@@ -96,6 +101,7 @@ public class _movePlayer : MonoBehaviour
     }
     void Update()
     {
+        LePansement();
         UpdateTargetRotation();
         UpdateCurRotation();
         UpdateCursorPosition();
@@ -131,7 +137,6 @@ public class _movePlayer : MonoBehaviour
     public void stick(InputAction.CallbackContext context)
     {
         dir = context.ReadValue<Vector2>();
-        Debug.Log(dir);
     }
 
     float dirTorque = 0f;
@@ -221,65 +226,58 @@ public class _movePlayer : MonoBehaviour
     {
         //// MOLETTE D'ORIGINE DE -1 A 1 , CONVERSION EN 0 A 1 ////////////////////
         ///A inverser aussi
-        molletteVitesse = (context.ReadValue<float>() * -1 + 1) * 0.5f;
+        molletteVitesse = (context.ReadValue<float>() * -1 + 1);
     }
 
-    float targetSpeed = 0f;
-
-    float curSpeed = 0f;
+    
 
     private void UpdateTargetSpeed()
     {
-        if (canTurbo)
-        {
-            if ((buttonBoost > 0 && siObjStop == false ) && turbo > 0)
+        if (buttonBoost > 0 && siObjStop == false && turbo > 0)
             {
                 AudioManager.instance.PlaySFX("Hyperdrive");
                 cameraFOV = Mathf.Lerp(cameraFOV, 80, 0.01f);
                 cameraFOVModifier.fieldOfView = cameraFOV;
                 turbo = turbo - 100f * Time.deltaTime;
-
-                if (targetSpeed < 2000f)
-                {
-                    targetSpeed += molletteVitesse * (speed * 10f) * Time.deltaTime;
-                }
-
+                    if (targetSpeed < 2000f)
+                    {
+                        targetSpeed += molletteVitesse * (speed * 10f) * Time.deltaTime;
+                    }
                 StartCoroutine(ActivateParticles());
                 warpActive = true;
             }
-        }
 
-        else if (targetSpeed > 200f && buttonBoost < 1 || turbo <= 0)
+        else if(turbo <= 0 && siObjStop == false || buttonBoost > 1 && turbo <= 0 && siObjStop == false) 
+        {
+            targetSpeed = molletteVitesse * (speed * 3f);
+            AudioManager.instance.StopSFX("Hyperdrive");
+            cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
+            cameraFOVModifier.fieldOfView = cameraFOV;
+            StartCoroutine(ActivateParticles());
+            warpActive = false;
+        }
+        else if (targetSpeed > 300f && buttonBoost < 1 && siObjStop == false)
         {
             AudioManager.instance.StopSFX("Hyperdrive");
             cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
-            targetSpeed -= molletteVitesse * (speed * 10f) * Time.deltaTime;
+            targetSpeed -= molletteVitesse * (speed * 10f);
             StartCoroutine(ActivateParticles());
             warpActive = false;
         }
-        else if (targetSpeed < 200f && buttonBoost < 1 || turbo <= 0)
+        else if (targetSpeed <= 300f && buttonBoost < 1 && siObjStop == false)
         {
             cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
-            targetSpeed = molletteVitesse * (speed * 2);
+            targetSpeed = molletteVitesse * (speed * 3f) ;
             StartCoroutine(ActivateParticles());
             warpActive = false;
         }
 
-        if(turbo <= turboMax) //tentative de limitation du turbo, ça marche pas
+        if(buttonBoost < 1 && turbo < turboMax)
         {
-            canTurbo = false;
-            turbo = turbo + 30f * Time.deltaTime;
+            turbo = turbo + 100f * Time.deltaTime;
         }
-
-        if(turbo > 100)
-        {
-            canTurbo = true;
-        }
-
-
-
 
     }
 
@@ -370,6 +368,14 @@ public class _movePlayer : MonoBehaviour
         impactCoroutine = null;
 
         yield return null;
+    }
+
+    private void LePansement()
+    {
+        if (molletteVitesse > 0.5f)
+        {
+            molletteVitesse = 0.5f;
+        }
     }
 }
 

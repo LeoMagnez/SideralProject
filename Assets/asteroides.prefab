@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 7268309950839270262}
   - component: {fileID: 2177000499876088720}
   - component: {fileID: 6679307914648800087}
-  - component: {fileID: 79172314275588951}
+  - component: {fileID: 2475081520465319488}
   m_Layer: 0
   m_Name: Box001_Part_7
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,7 +93,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 79172314275588948}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -101,7 +101,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &79172314275588951
+--- !u!65 &2475081520465319488
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,7 +113,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.1577342, y: 2.1097498, z: 2.9585378}
-  m_Center: {x: -0.000000007450581, y: 0.0000009536743, z: 0}
+  m_Center: {x: -0.00012207031, y: -0.00000011920929, z: 0}
 --- !u!1 &370501576136335853
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,10 +126,10 @@ GameObject:
   - component: {fileID: 9192991788157869800}
   - component: {fileID: 3202681806081587287}
   - component: {fileID: 6679307913728172017}
-  - component: {fileID: 3202681806081587286}
+  - component: {fileID: 7916391010184469465}
   m_Layer: 0
   m_Name: Box001_Part_2
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -207,7 +207,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370501576136335853}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -215,7 +215,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3202681806081587286
+--- !u!65 &7916391010184469465
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,7 +227,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.8967905, y: 1.9645035, z: 1.9533025}
-  m_Center: {x: 0.000000059604645, y: 0.0000009536743, z: 0.00000005960463}
+  m_Center: {x: -0.000061035156, y: -0.00000023841858, z: 0.00000005960463}
 --- !u!1 &857552934703959053
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,10 +240,10 @@ GameObject:
   - component: {fileID: 3928447349761157891}
   - component: {fileID: 4697444234188031901}
   - component: {fileID: 6679307914456306824}
-  - component: {fileID: 3928447349761157890}
+  - component: {fileID: 1446653484045190521}
   m_Layer: 0
   m_Name: Box001_Part_9
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -321,7 +321,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 857552934703959053}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -329,7 +329,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3928447349761157890
+--- !u!65 &1446653484045190521
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -341,7 +341,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.6182253, y: 2.345782, z: 2.4306107}
-  m_Center: {x: 0.00000014901161, y: 0, z: -0.000000059604645}
+  m_Center: {x: -0.000061005354, y: 0, z: -0.00000011920929}
 --- !u!1 &927779116870917059
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,10 +354,10 @@ GameObject:
   - component: {fileID: 2049972618034212068}
   - component: {fileID: 7036613406095042315}
   - component: {fileID: 6679307913206543431}
-  - component: {fileID: 3284403981898410781}
+  - component: {fileID: 5981839294952198277}
   m_Layer: 0
   m_Name: Box001_Part_1
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -435,7 +435,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927779116870917059}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -443,7 +443,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3284403981898410781
+--- !u!65 &5981839294952198277
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -455,7 +455,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.8521252, y: 2.1295552, z: 2.154454}
-  m_Center: {x: -0.000000029802319, y: 0, z: -0.000000059604645}
+  m_Center: {x: -0.000061005354, y: 0.00000011920929, z: -0.000000059604645}
 --- !u!1 &1951722453533374113
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,10 +468,10 @@ GameObject:
   - component: {fileID: 7636916972650588307}
   - component: {fileID: 140985591465553215}
   - component: {fileID: 6679307914734931514}
-  - component: {fileID: 2824272415198374481}
+  - component: {fileID: 7011456481277946054}
   m_Layer: 0
   m_Name: Box001_Part_8
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -549,7 +549,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951722453533374113}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -557,7 +557,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &2824272415198374481
+--- !u!65 &7011456481277946054
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -569,7 +569,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.8844857, y: 1.5437617, z: 2.2485595}
-  m_Center: {x: -0.000000029802319, y: 8.4703295e-22, z: 1.4210855e-14}
+  m_Center: {x: -0.00012204051, y: 8.4703295e-22, z: 1.4210855e-14}
 --- !u!1 &3053303979702065609
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,10 +582,10 @@ GameObject:
   - component: {fileID: 1762230689634838066}
   - component: {fileID: 192522054022461975}
   - component: {fileID: 6679307913728172020}
-  - component: {fileID: 3053303979702065608}
+  - component: {fileID: 7750804265123723613}
   m_Layer: 0
   m_Name: Box001_Part_5
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -663,7 +663,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3053303979702065609}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -671,7 +671,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3053303979702065608
+--- !u!65 &7750804265123723613
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -683,7 +683,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.6212046, y: 1.8531405, z: 2.7488086}
-  m_Center: {x: 0.00000011920929, y: 0.0000019073486, z: 0.000000059604645}
+  m_Center: {x: -0.000061035156, y: 0.00000017881393, z: 0.000000018626451}
 --- !u!1 &3796958060134504008
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,10 +696,10 @@ GameObject:
   - component: {fileID: 485632238383662338}
   - component: {fileID: 3109454021529700051}
   - component: {fileID: 6679307913265809747}
-  - component: {fileID: 3109454021529700050}
+  - component: {fileID: 1867390868678341678}
   m_Layer: 0
   m_Name: Box001_Part_4
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -777,7 +777,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3796958060134504008}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -785,7 +785,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3109454021529700050
+--- !u!65 &1867390868678341678
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -797,7 +797,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.4573247, y: 1.2355874, z: 1.124074}
-  m_Center: {x: 0.000000029802322, y: 0.0000009834766, z: 0.0000002384186}
+  m_Center: {x: -0.000061035156, y: 0.00000002980233, z: 0.00000020861629}
 --- !u!1 &4324096920482969736
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,10 +810,10 @@ GameObject:
   - component: {fileID: 6166713273934284820}
   - component: {fileID: 897101433097184292}
   - component: {fileID: 6679307914362783116}
-  - component: {fileID: 4324096920482969739}
+  - component: {fileID: 2050228767470847552}
   m_Layer: 0
   m_Name: Box001_Part_3
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -891,7 +891,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4324096920482969736}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -899,7 +899,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &4324096920482969739
+--- !u!65 &2050228767470847552
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -911,7 +911,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.0486085, y: 1.9856925, z: 2.3304496}
-  m_Center: {x: -0.000000059604645, y: 0.0000009536743, z: 0.00000011920929}
+  m_Center: {x: -0.000061035156, y: 0.00000011920929, z: 0.000000059604645}
 --- !u!1 &4653456739775104615
 GameObject:
   m_ObjectHideFlags: 0
@@ -924,10 +924,10 @@ GameObject:
   - component: {fileID: 4052434048645159164}
   - component: {fileID: 1590529000885351042}
   - component: {fileID: 6679307914551281580}
-  - component: {fileID: 4052434048645159167}
+  - component: {fileID: 2961461502528911490}
   m_Layer: 0
   m_Name: Box001_Part_6
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1005,7 +1005,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4653456739775104615}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 0.01
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -1013,7 +1013,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &4052434048645159167
+--- !u!65 &2961461502528911490
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1025,7 +1025,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1.6018552, y: 1.4951218, z: 1.952008}
-  m_Center: {x: -0.000000059604645, y: 0.000001937151, z: 0.0000003576279}
+  m_Center: {x: -0.000061035156, y: -0.00000020861626, z: 0.0000002384186}
 --- !u!1 &5796347096524399287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,10 +1330,10 @@ GameObject:
   - component: {fileID: 2351307536146438479}
   - component: {fileID: 8452434120090569494}
   - component: {fileID: 6679307914835020231}
-  - component: {fileID: 2351307536146438478}
+  - component: {fileID: 6434831147236882338}
   m_Layer: 0
   m_Name: Box001_Part_10
-  m_TagString: Untagged
+  m_TagString: petitAsteroide
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1419,7 +1419,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &2351307536146438478
+--- !u!65 &6434831147236882338
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1431,4 +1431,4 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.371496, y: 1.6749498, z: 2.0544868}
-  m_Center: {x: 0.000000029802322, y: 0.00000002980233, z: -0.00000005960463}
+  m_Center: {x: -0.000061035156, y: 0.00000002980233, z: -0.00000005960463}
