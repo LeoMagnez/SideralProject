@@ -153,14 +153,14 @@ public class _movePlayer : MonoBehaviour
     Quaternion targetRot;
 
     [SerializeField]
-    [Tooltip("Vitesse de transition des rotations visées")]
+    [Tooltip("Vitesse de transition des rotations visï¿½es")]
     [Range(0.1f, 5f)]
     float targetRotationAccelerationSpeed = 0.2f;
 
 
     private void UpdateTargetRotation()
     {
-        //pourrait être dans une autre fonction, mais ppour l'instant s'pratique ici
+        //pourrait ï¿½tre dans une autre fonction, mais ppour l'instant s'pratique ici
 
         curTargetDir = Vector2.Lerp(curTargetDir, dir, targetRotationAccelerationSpeed * Time.deltaTime);
         curDirTorque = Mathf.Lerp(dirTorque, curDirTorque, targetRotationAccelerationSpeed * 5 * Time.deltaTime);
@@ -179,7 +179,7 @@ public class _movePlayer : MonoBehaviour
     }
 
     [SerializeField]
-    [Tooltip("Vitesse de transition de rotation, de la rotation actuelle vers la rotation visée")]
+    [Tooltip("Vitesse de transition de rotation, de la rotation actuelle vers la rotation visï¿½e")]
     [Range(0.1f, 5f)]
     float rotationAccelerationSpeed = 0.2f;
 
@@ -334,7 +334,6 @@ public class _movePlayer : MonoBehaviour
     ///
     void OnCollisionEnter(Collision collision)
     {
-
         if (collision.rigidbody)
         {
             if (collision.rigidbody.tag == "asteroideComplet")
@@ -351,7 +350,18 @@ public class _movePlayer : MonoBehaviour
             }
         }
     }
-
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.name == "objBonus")
+        {
+            other.gameObject.SetActive(false) ; 
+            turbo += 500 ; 
+            if(turbo > turboMax)
+            {
+                turbo = 999 ; 
+            }
+        }
+    }
     private IEnumerator CollisionCoroutine()
     {
         targetSpeed = 0;

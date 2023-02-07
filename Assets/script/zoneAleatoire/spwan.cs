@@ -8,15 +8,15 @@ public class spwan : MonoBehaviour
 
    public int nombreObj ; 
    public GameObject prefabQuiApparait ;
+   public GameObject prefabQuiApparaitDeux ;
    public GameObject dossierRangement ;
    public GameObject player ;
    GameObject[] pool ;
+   GameObject[] poolBonus ;
+
 
    float detectionRadius ;
-   float timer = 0;
-   bool siIlEstActive = false;
-   bool coroutinesEstActive = false;
-   bool siIlsOntSpawn = false;
+   bool coroutinesEstActive = false;   
 
 
 
@@ -26,7 +26,9 @@ public class spwan : MonoBehaviour
         nombreObj = ((int)gameObject.transform.localScale.x +(int)gameObject.transform.localScale.y +(int)gameObject.transform.localScale.z)/3 ; 
 
         /////////// SI TU VEUX CHANGER LE NB OBJ DANS LA ZONE //////////
-        pool = new GameObject[1900];
+        pool = new GameObject[1500];
+        poolBonus = new GameObject[1500];
+
         /////////// FIN //////////
 
         /////////// SI TU VEUX CHANGER LA TAILLE DE DETECTION QU IL Y A ENTRE LE JOUEUR ET LA ZONE //////////
@@ -37,6 +39,11 @@ public class spwan : MonoBehaviour
         {
             pool[i] = Instantiate(prefabQuiApparait, new Vector3(Random.Range(gameObject.transform.position.x + -gameObject.transform.localScale.x /2 , gameObject.transform.position.x + gameObject.transform.localScale.x /2),Random.Range(gameObject.transform.position.y -gameObject.transform.localScale.y /2 ,gameObject.transform.position.y + gameObject.transform.localScale.y /2),Random.Range(gameObject.transform.position.z -gameObject.transform.localScale.z /2 , gameObject.transform.position.z + gameObject.transform.localScale.z /2)) , Quaternion.identity , dossierRangement.transform) ;
         }
+        for (int i = 0; i < pool.Length; i++)
+        {
+            poolBonus[i] = Instantiate(prefabQuiApparaitDeux, new Vector3(Random.Range(gameObject.transform.position.x + -gameObject.transform.localScale.x /2 , gameObject.transform.position.x + gameObject.transform.localScale.x /2),Random.Range(gameObject.transform.position.y -gameObject.transform.localScale.y /2 ,gameObject.transform.position.y + gameObject.transform.localScale.y /2),Random.Range(gameObject.transform.position.z -gameObject.transform.localScale.z /2 , gameObject.transform.position.z + gameObject.transform.localScale.z /2)) , Quaternion.identity , dossierRangement.transform) ;
+            poolBonus[i].name = "bonus" ;       
+        }        
     }
 
     // Update is called once per frame
@@ -45,22 +52,19 @@ public class spwan : MonoBehaviour
         if(Vector3.Distance(player.transform.position,gameObject.transform.position) > detectionRadius)
         {
             coroutinesEstActive = false ;
-            siIlEstActive = false ;                             
+            
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].SetActive(false) ; 
+                poolBonus[i].SetActive(false) ; 
+
             } 
         }
-        else if(Vector3.Distance(player.transform.position,gameObject.transform.position) < detectionRadius && siIlEstActive == false)
-        {
-            siIlEstActive = true ; 
-        }
-        else if(siIlEstActive == true && coroutinesEstActive == false)
+        else if(Vector3.Distance(player.transform.position,gameObject.transform.position) < detectionRadius && coroutinesEstActive == false)
         {
             StartCoroutine(apparitionAsteroide());
         }
     }
-
     IEnumerator apparitionAsteroide()
     {
             coroutinesEstActive = true;
@@ -68,46 +72,58 @@ public class spwan : MonoBehaviour
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].SetActive(true);
+                poolBonus[i].SetActive(true);
+
                 pool[i].transform.localScale = new Vector3(0f, 0f, 0f) ;
+                poolBonus[i].transform.localScale = new Vector3(0f, 0f, 0f) ;
+
             }
             yield return new WaitForSeconds(0.5f) ; 
-
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].transform.localScale += new Vector3(1f,1f,1f);
+                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
+
             }
             yield return new WaitForSeconds(0.1f) ; 
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].transform.localScale += new Vector3(1f,1f,1f);
+                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
+                
             }
             yield return new WaitForSeconds(0.1f) ;
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].transform.localScale += new Vector3(1f,1f,1f);
+                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
+
             }
             yield return new WaitForSeconds(0.1f) ;
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].transform.localScale += new Vector3(1f,1f,1f);
+                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
+
             }
             yield return new WaitForSeconds(0.1f) ;             
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].transform.localScale += new Vector3(1f,1f,1f);
+                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
+
             }
             yield return new WaitForSeconds(0.1f) ;                                                 
 
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].transform.localScale = new Vector3(Random.Range(1f, 10f), Random.Range(1f, 10f), Random.Range(1f, 10f));
+                poolBonus[i].transform.localScale = new Vector3(1f,1f,1f);
             }
-
     }
     void OnDrawGizmos()
     {
-
         Gizmos.color =  Color.red ;
         Gizmos.DrawWireSphere(transform.position,detectionRadius) ;         
-    }     
+    }
 }
