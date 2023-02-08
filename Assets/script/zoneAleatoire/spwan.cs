@@ -38,10 +38,12 @@ public class spwan : MonoBehaviour
         for (int i = 0; i < pool.Length; i++)
         {
             pool[i] = Instantiate(prefabQuiApparait, new Vector3(Random.Range(gameObject.transform.position.x + -gameObject.transform.localScale.x /2 , gameObject.transform.position.x + gameObject.transform.localScale.x /2),Random.Range(gameObject.transform.position.y -gameObject.transform.localScale.y /2 ,gameObject.transform.position.y + gameObject.transform.localScale.y /2),Random.Range(gameObject.transform.position.z -gameObject.transform.localScale.z /2 , gameObject.transform.position.z + gameObject.transform.localScale.z /2)) , Quaternion.identity , dossierRangement.transform) ;
+            pool[i].SetActive(false) ;         
         }
-        for (int i = 0; i < pool.Length; i++)
+        for (int i = 0; i < poolBonus.Length; i++)
         {
             poolBonus[i] = Instantiate(prefabQuiApparaitDeux, new Vector3(Random.Range(gameObject.transform.position.x + -gameObject.transform.localScale.x /2 , gameObject.transform.position.x + gameObject.transform.localScale.x /2),Random.Range(gameObject.transform.position.y -gameObject.transform.localScale.y /2 ,gameObject.transform.position.y + gameObject.transform.localScale.y /2),Random.Range(gameObject.transform.position.z -gameObject.transform.localScale.z /2 , gameObject.transform.position.z + gameObject.transform.localScale.z /2)) , Quaternion.identity , dossierRangement.transform) ;
+            poolBonus[i].SetActive(false) ;                     
             poolBonus[i].name = "bonus" ;       
         }        
     }
@@ -68,7 +70,7 @@ public class spwan : MonoBehaviour
     IEnumerator apparitionAsteroide()
     {
             coroutinesEstActive = true;
-
+/////// SI ON GARDE LE MEME NB D'OBJ DANS LES DEUX POOL Y A PAS DE SOUCIS, SINON FAUDRA RE POLISH LE SCRIPT, MAIS YA PAS DE SOUCIS C'EST RAPIDE ////////
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].SetActive(true);
