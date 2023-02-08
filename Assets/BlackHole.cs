@@ -19,7 +19,7 @@ public class BlackHole : MonoBehaviour
     {
         if (okOuPas && fadeToBlackPanel.color.a < 1)
         {
-            fadeToBlackPanel.color = new Vector4(fadeToBlackPanel.color.r, fadeToBlackPanel.color.g, fadeToBlackPanel.color.b, fadeToBlackPanel.color.a + 0.05f);
+            fadeToBlackPanel.color = new Vector4(fadeToBlackPanel.color.r, fadeToBlackPanel.color.g, fadeToBlackPanel.color.b, fadeToBlackPanel.color.a + 0.01f);
         }
     }
 
