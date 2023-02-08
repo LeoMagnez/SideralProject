@@ -21,6 +21,7 @@ public class PlaneteCasseeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        planeteMat.SetFloat("_Shockwave_Span", 0f);
         shard1.SetActive(false);
         shard2.SetActive(false);
         shard3.SetActive(false);
