@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class randomscirpttest : MonoBehaviour
 {
-    //brute method, a changé si possible
     [SerializeField]
     private GameObject GameObject;
     [SerializeField]
@@ -28,6 +27,8 @@ public class randomscirpttest : MonoBehaviour
     private GameObject GameObject9;
     [SerializeField]
     private GameObject GameObject10;
+
+
     private void Start()
     {
         GameObject.SetActive(true);
@@ -56,6 +57,8 @@ public class randomscirpttest : MonoBehaviour
         GameObject8.SetActive(true);
         GameObject9.SetActive(true);
         GameObject10.SetActive(true);
+
+        //INSERT FX HERE
     }
 
     public void PRINTEVENT2(String D)
