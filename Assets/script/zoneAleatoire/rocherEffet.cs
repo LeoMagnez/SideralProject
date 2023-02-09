@@ -21,10 +21,12 @@ public class rocherEffet : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-       if (collision.rigidbody.tag == "Player" || collision.rigidbody.tag == "asteroideComplet")
+       if (collision.gameObject.tag == "Player" )//|| collision.rigidbody.tag == "asteroideComplet")
         {
             fracture.SetActive(true);
-            gameObject.SetActive(false);
+            visual.enabled= false;
+            gameObject.GetComponent<SphereCollider>().enabled = false;
+            //gameObject.SetActive(false);
         }
     }    
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class spwan : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class spwan : MonoBehaviour
    public GameObject prefabQuiApparaitDeux ;
    public GameObject dossierRangement ;
    public GameObject player ;
+   [SerializeField] int bonusQuantity;
    GameObject[] pool ;
    GameObject[] poolBonus ;
 
@@ -27,7 +29,7 @@ public class spwan : MonoBehaviour
 
         /////////// SI TU VEUX CHANGER LE NB OBJ DANS LA ZONE //////////
         pool = new GameObject[1500];
-        poolBonus = new GameObject[1500];
+        poolBonus = new GameObject[bonusQuantity];
 
         /////////// FIN //////////
 
@@ -58,70 +60,65 @@ public class spwan : MonoBehaviour
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].SetActive(false) ; 
-                poolBonus[i].SetActive(false) ; 
+                
 
-            } 
+            }
+            for (int i = 0; i < poolBonus.Length; i++)
+            {
+                poolBonus[i].SetActive(false);
+            }
         }
         else if(Vector3.Distance(player.transform.position,gameObject.transform.position) < detectionRadius && coroutinesEstActive == false)
         {
             StartCoroutine(apparitionAsteroide());
         }
     }
+
+    void InitPoolInstance()
+    {
+        for (int i = 0; i < pool.Length; i++)
+        {
+            pool[i].SetActive(true);
+
+
+            pool[i].transform.localScale = new Vector3(0f, 0f, 0f);
+
+
+        }
+        for (int i = 0; i < poolBonus.Length; i++)
+        {
+            poolBonus[i].SetActive(true);
+            poolBonus[i].transform.localScale = new Vector3(0f, 0f, 0f);
+        }
+    }
+    void AugmentSizeObject()
+    {
+        for (int i = 0; i < pool.Length; i++)
+        {
+            pool[i].transform.localScale += new Vector3(1f, 1f, 1f);
+
+
+        }
+        for (int i = 0; i < poolBonus.Length; i++)
+        {
+            poolBonus[i].transform.localScale += new Vector3(1f, 1f, 1f);
+        }
+    }
     IEnumerator apparitionAsteroide()
     {
             coroutinesEstActive = true;
-/////// SI ON GARDE LE MEME NB D'OBJ DANS LES DEUX POOL Y A PAS DE SOUCIS, SINON FAUDRA RE POLISH LE SCRIPT, MAIS YA PAS DE SOUCIS C'EST RAPIDE ////////
-            for (int i = 0; i < pool.Length; i++)
-            {
-                pool[i].SetActive(true);
-                poolBonus[i].SetActive(true);
+        /////// SI ON GARDE LE MEME NB D'OBJ DANS LES DEUX POOL Y A PAS DE SOUCIS, SINON FAUDRA RE POLISH LE SCRIPT, MAIS YA PAS DE SOUCIS C'EST RAPIDE ////////
 
-                pool[i].transform.localScale = new Vector3(0f, 0f, 0f) ;
-                poolBonus[i].transform.localScale = new Vector3(0f, 0f, 0f) ;
+            InitPoolInstance();
 
-            }
-            yield return new WaitForSeconds(0.5f) ; 
-            for (int i = 0; i < pool.Length; i++)
+            yield return new WaitForSeconds(0.5f) ;
+            for (int i = 0; i < 5; i++)
             {
-                pool[i].transform.localScale += new Vector3(1f,1f,1f);
-                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
+                AugmentSizeObject();
+                yield return new WaitForSeconds(0.1f);
+            }
+        
 
-            }
-            yield return new WaitForSeconds(0.1f) ; 
-            for (int i = 0; i < pool.Length; i++)
-            {
-                pool[i].transform.localScale += new Vector3(1f,1f,1f);
-                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
-                
-            }
-            yield return new WaitForSeconds(0.1f) ;
-            for (int i = 0; i < pool.Length; i++)
-            {
-                pool[i].transform.localScale += new Vector3(1f,1f,1f);
-                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
-
-            }
-            yield return new WaitForSeconds(0.1f) ;
-            for (int i = 0; i < pool.Length; i++)
-            {
-                pool[i].transform.localScale += new Vector3(1f,1f,1f);
-                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
-
-            }
-            yield return new WaitForSeconds(0.1f) ;             
-            for (int i = 0; i < pool.Length; i++)
-            {
-                pool[i].transform.localScale += new Vector3(1f,1f,1f);
-                poolBonus[i].transform.localScale += new Vector3(0.2f,0.2f,0.2f);
-
-            }
-            yield return new WaitForSeconds(0.1f) ;                                                 
-
-            for (int i = 0; i < pool.Length; i++)
-            {
-                pool[i].transform.localScale = new Vector3(Random.Range(1f, 10f), Random.Range(1f, 10f), Random.Range(1f, 10f));
-                poolBonus[i].transform.localScale = new Vector3(10f,10f,10f);
-            }
     }
     void OnDrawGizmos()
     {
