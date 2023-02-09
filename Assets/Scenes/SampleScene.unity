@@ -365,6 +365,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Planetes
       objectReference: {fileID: 0}
+    - target: {fileID: 5966178089864430705, guid: 8d64eb6b346ffe1469823b341c8afda7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6068137679205340410, guid: 8d64eb6b346ffe1469823b341c8afda7,
         type: 3}
       propertyPath: blackHole
@@ -1711,6 +1716,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: _zoneDeRoche (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6358777537284172656, guid: d464450aa3ccf05488b7d9f48178baf2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6358777537284172657, guid: d464450aa3ccf05488b7d9f48178baf2,
         type: 3}
       propertyPath: m_RootOrder
@@ -2250,6 +2260,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: _zoneDeRoche (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6358777537284172656, guid: d464450aa3ccf05488b7d9f48178baf2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6358777537284172657, guid: d464450aa3ccf05488b7d9f48178baf2,
         type: 3}
       propertyPath: m_RootOrder
@@ -2620,6 +2635,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: _zoneDeRoche
+      objectReference: {fileID: 0}
+    - target: {fileID: 6358777537284172656, guid: d464450aa3ccf05488b7d9f48178baf2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6358777537284172657, guid: d464450aa3ccf05488b7d9f48178baf2,
         type: 3}

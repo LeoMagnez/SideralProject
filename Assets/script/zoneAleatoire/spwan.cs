@@ -120,7 +120,7 @@ public class spwan : MonoBehaviour
             for (int i = 0; i < pool.Length; i++)
             {
                 pool[i].transform.localScale = new Vector3(Random.Range(1f, 10f), Random.Range(1f, 10f), Random.Range(1f, 10f));
-                poolBonus[i].transform.localScale = new Vector3(1f,1f,1f);
+                poolBonus[i].transform.localScale = new Vector3(10f,10f,10f);
             }
     }
     void OnDrawGizmos()
