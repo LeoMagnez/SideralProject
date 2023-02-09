@@ -250,7 +250,6 @@ public class _movePlayer : MonoBehaviour
         else if(turbo <= 0 && siObjStop == false || buttonBoost > 1 && turbo <= 0 && siObjStop == false) 
         {
             targetSpeed = molletteVitesse * (speed * 3f);
-            AudioManager.instance.StopSFX("Hyperdrive");
             cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
             StartCoroutine(ActivateParticles());
@@ -258,7 +257,7 @@ public class _movePlayer : MonoBehaviour
         }
         else if (targetSpeed > 300f && buttonBoost < 1 && siObjStop == false)
         {
-            AudioManager.instance.StopSFX("Hyperdrive");
+
             cameraFOV = Mathf.Lerp(cameraFOV, 60, 0.01f);
             cameraFOVModifier.fieldOfView = cameraFOV;
             targetSpeed -= molletteVitesse * (speed * 10f);

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.VFX;
+using TMPro;
 
 public class EndOfGameManager : MonoBehaviour
 {
@@ -13,6 +14,14 @@ public class EndOfGameManager : MonoBehaviour
     public LensDistortion distortion;
     public float fishEye;
     public CameraShake shake;
+    public Material glitchyHologram;
+    public Material glitchyHologram2;
+    public Material glitchyHologram3;
+    public Material glitchyText;
+    public Material glitchyText2;
+
+    public FlickeringLight leftFlickeringLight;
+    public FlickeringLight rightFlickeringLight;
 
     public float timer = 5f;
     private float amountSpan;
@@ -21,9 +30,18 @@ public class EndOfGameManager : MonoBehaviour
     private float sizeSpan;
     public float duration = 2f;
     private bool entered;
+
+
+    public TextMeshProUGUI errorText;
     // Start is called before the first frame update
     void Start()
     {
+        glitchyHologram.SetFloat("_GlitchAmount", 0f);
+        glitchyHologram2.SetFloat("_GlitchAmount", 0f);
+        glitchyHologram3.SetFloat("_GlitchAmount", 0f);
+        glitchyText.SetFloat("_GlitchAmount", 0f);
+        glitchyText2.SetFloat("_GlitchAmount", 0f);
+        errorText.text = "";
         entered = false;
     }
 
@@ -42,6 +60,19 @@ public class EndOfGameManager : MonoBehaviour
             float amountPercentageComplete = amountElapsedTime / duration;
             amountSpan = Mathf.MoveTowards(0f, 1f, amountPercentageComplete * 4f);
             flamesVFX.SetFloat("FlameAmount", amountSpan);
+
+            glitchyHologram.SetFloat("_GlitchAmount", Mathf.PingPong(Time.timeScale, 0.3f));
+            glitchyHologram2.SetFloat("_GlitchAmount", Mathf.PingPong(Time.timeScale, 0.3f));
+            glitchyHologram3.SetFloat("_GlitchAmount", Mathf.PingPong(Time.timeScale, 0.3f));
+            glitchyText.SetFloat("_GlitchAmount", Mathf.PingPong(Time.timeScale, 0.4f));
+            glitchyText2.SetFloat("_GlitchAmount", Mathf.PingPong(Time.timeScale, 0.4f));
+
+            StartCoroutine(ErrorFlicker());
+            leftFlickeringLight.flickerDuration = 0.4f;
+            rightFlickeringLight.flickerDuration = 0.4f;
+            StartCoroutine(leftFlickeringLight.Flickering(6f, 1f));
+            StartCoroutine(rightFlickeringLight.Flickering(6f, 1f));
+
             StartCoroutine(shake.Shake(5f, 0.1f));
         }
 
@@ -56,6 +87,11 @@ public class EndOfGameManager : MonoBehaviour
             volume.profile.TryGet<LensDistortion>(out distortion);
             fishEye = Mathf.MoveTowards(0f, -1f, sizePercentageComplete * 2f);
             distortion.intensity.Override(fishEye);
+
+            leftFlickeringLight.flickerDuration = 0.2f;
+            rightFlickeringLight.flickerDuration = 0.2f;
+            StartCoroutine(leftFlickeringLight.Flickering(5.5f, 1f));
+            StartCoroutine(rightFlickeringLight.Flickering(5.5f, 1f));
         }
     }
 
@@ -65,5 +101,19 @@ public class EndOfGameManager : MonoBehaviour
         {
             entered = true;
         }
+    }
+
+    public IEnumerator ErrorFlicker()
+    {
+        while (entered)
+        {
+            errorText.text = "ERROR";
+            yield return new WaitForSeconds(0.8f);
+            errorText.text = "";
+            yield return new WaitForSeconds(0.8f);
+        }
+
+
+
     }
 }
